@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+	
+ <bean id="fooTarget" class="test.edu.javaee.spring.aop.FooImpl"/>
+ 
+ <bean id="afterAdvice" class="test.edu.javaee.spring.aop.SimpleLogAfterReturningAdvice"/>
+ 
+ <bean id="beforeAdvice" class="test.edu.javaee.spring.aop.SimpleLogBeforeMehtod"/>
+ 
+ <bean id="nameAdvisor" class="dev.edu.javaee.spring.aop.support.NameMatchMethodPointcutAdvisor">
+  <property name="mappedNames">
+    <list value="printFoo"/> 	
+    <list value="dummyFoo"/>
+  </property>  
+  <property name="advice" ref="afterAdvice"> </property>   
+ </bean>
+ 
+ 
+  <bean id="jdkAdvisor" class="dev.edu.javaee.spring.aop.support.JdkRegexpMethodPointcutAdvisor">
+  <property name="patterns">
+  	<list value="dummy\w+"/>
+  </property>  
+  <property name="advice" ref="beforeAdvice"> </property>   
+ </bean>
+ 
+ <bean id="foo" class="test.edu.javaee.spring.aop.ProxyFactoryBean">
+    <property name="proxyInterfaces" value="test.edu.javaee.spring.aop.FooInterface"> </property>    	
+    <property name="target" ref="fooTarget"> </property>
+    <property name="interceptorNames">
+    	<advisorlist value="nameAdvisor"></advisorlist>
+    	<advisorlist value="jdkAdvisor"></advisorlist>
+    </property>
+  </bean>
+</beans>
